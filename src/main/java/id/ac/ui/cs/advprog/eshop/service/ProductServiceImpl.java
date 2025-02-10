@@ -33,4 +33,9 @@ public class ProductServiceImpl implements ProductService {
     public Optional<Product> findOneById(String productId) {
         return productRepository.findOneById(productId);
     }
+
+    @Override
+    public Optional<Product> updateById(String productId, Product productData) {
+        return productRepository.updateById(productId, productData);
+    }
 }

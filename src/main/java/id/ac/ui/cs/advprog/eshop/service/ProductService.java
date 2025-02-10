@@ -9,4 +9,5 @@ public interface ProductService {
     public Product create(Product product);
     public List<Product> findAll();
     public Optional<Product> findOneById(String productId);
+    public Optional<Product> updateById(String productId, Product productData);
 }
