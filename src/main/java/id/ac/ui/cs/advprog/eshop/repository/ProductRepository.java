@@ -3,10 +3,7 @@ package id.ac.ui.cs.advprog.eshop.repository;
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Repository
 public class ProductRepository {
@@ -16,6 +13,33 @@ public class ProductRepository {
         product.setProductId(UUID.randomUUID().toString());
         productData.add(product);
         return product;
+    }
+
+    public Optional<Product> findOneById(String productId) {
+        Optional<Product> productResult = Optional.empty();
+
+        for (Product product : productData) {
+            if (product.getProductId().equals(productId)) {
+                productResult = Optional.of(product);
+                break;
+            }
+        }
+
+        return productResult;
+    }
+
+    public Optional<Product> updateById(String productId, Product productData) {
+        Optional<Product> productOptional = findOneById(productId);
+
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            product.setProductName(productData.getProductName());
+            product.setProductQuantity(productData.getProductQuantity());
+
+            return Optional.of(product);
+        }
+
+        return Optional.empty();
     }
 
     public Iterator<Product> findAll() {
