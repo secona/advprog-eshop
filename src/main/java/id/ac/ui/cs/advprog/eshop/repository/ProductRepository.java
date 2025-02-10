@@ -28,6 +28,20 @@ public class ProductRepository {
         return productResult;
     }
 
+    public Optional<Product> updateById(String productId, Product productData) {
+        Optional<Product> productOptional = findOneById(productId);
+
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            product.setProductName(productData.getProductName());
+            product.setProductQuantity(productData.getProductQuantity());
+
+            return Optional.of(product);
+        }
+
+        return Optional.empty();
+    }
+
     public Iterator<Product> findAll() {
         return productData.iterator();
     }
