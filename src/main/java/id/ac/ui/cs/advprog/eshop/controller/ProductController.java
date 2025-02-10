@@ -47,4 +47,10 @@ public class ProductController {
             return "ProductNotFound";
         }
     }
+
+    @PostMapping("/edit/{productId}")
+    public String editProduct(@PathVariable String productId, @ModelAttribute Product product) {
+        productService.updateById(productId, product);
+        return "redirect:../list";
+    }
 }
