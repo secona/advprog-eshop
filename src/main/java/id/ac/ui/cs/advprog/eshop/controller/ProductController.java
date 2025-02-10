@@ -5,12 +5,10 @@ import id.ac.ui.cs.advprog.eshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/product")
@@ -36,5 +34,17 @@ public class ProductController {
         List<Product> productsList = productService.findAll();
         model.addAttribute("products", productsList);
         return "ListProduct";
+    }
+
+    @GetMapping("/edit/{productId}")
+    public String editProductPage(@PathVariable String productId, Model model) {
+        Optional<Product> product = productService.findOneById(productId);
+
+        if (product.isPresent()) {
+            model.addAttribute("product", product.get());
+            return "EditProduct";
+        } else {
+            return "ProductNotFound";
+        }
     }
 }
