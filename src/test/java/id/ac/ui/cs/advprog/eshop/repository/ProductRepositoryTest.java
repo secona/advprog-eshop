@@ -176,4 +176,19 @@ public class ProductRepositoryTest {
         assertEquals(product2.getProductId(), productIterator.next().getProductId());
         assertFalse(productIterator.hasNext());
     }
+
+    @Test
+    void testDeleteByIdWithNullId() {
+        Product product = new Product();
+        product.setProductName("Berserk Vol. 1");
+        product.setProductQuantity(1);
+        productRepository.create(product);
+
+        boolean result = productRepository.deleteById(null);
+
+        assertFalse(result);
+
+        Iterator<Product> products = productRepository.findAll();
+        assertTrue(products.hasNext());
+    }
 }
