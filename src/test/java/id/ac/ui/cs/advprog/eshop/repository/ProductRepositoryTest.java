@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Iterator;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -68,5 +69,36 @@ public class ProductRepositoryTest {
         assertEquals(product2.getProductId(), savedProduct.getProductId());
         assertEquals(product2.getProductName(), savedProduct.getProductName());
         assertEquals(product2.getProductQuantity(), savedProduct.getProductQuantity());
+    }
+
+    @Test
+    void testFindOneByIdFound() {
+        Product product1 = new Product();
+        product1.setProductId("c245ed51-ad89-4e6f-b50a-35293ab8d7d1");
+        product1.setProductName("Berserk Vol. 1");
+        product1.setProductQuantity(1);
+        productRepository.create(product1);
+
+        Optional<Product> found = productRepository.findOneById(product1.getProductId());
+
+        assertTrue(found.isPresent());
+
+        Product foundProduct = found.get();
+        assertEquals(product1.getProductId(), foundProduct.getProductId());
+        assertEquals(product1.getProductName(), foundProduct.getProductName());
+        assertEquals(product1.getProductQuantity(), foundProduct.getProductQuantity());
+    }
+
+    @Test
+    void testFindOneByIdNotFound() {
+        Product product1 = new Product();
+        product1.setProductId("c245ed51-ad89-4e6f-b50a-35293ab8d7d1");
+        product1.setProductName("Berserk Vol. 1");
+        product1.setProductQuantity(1);
+        productRepository.create(product1);
+
+        Optional<Product> found = productRepository.findOneById("c245ed51-ad89-4e6f-b50a-35293ab8d7d1");
+
+        assertFalse(found.isPresent());
     }
 }
