@@ -101,4 +101,36 @@ public class ProductRepositoryTest {
 
         assertFalse(found.isPresent());
     }
+
+    @Test
+    void testUpdateByIdSuccess() {
+        Product product1 = new Product();
+        product1.setProductId("c245ed51-ad89-4e6f-b50a-35293ab8d7d1");
+        product1.setProductName("Berserk Vol. 1");
+        product1.setProductQuantity(1);
+        productRepository.create(product1);
+
+        Product updatedProduct = new Product();
+        updatedProduct.setProductName("Berserk Vol. 1 Deluxe");
+        updatedProduct.setProductQuantity(2);
+
+        Optional<Product> result = productRepository.updateById(product1.getProductId(), updatedProduct);
+
+        assertTrue(result.isPresent());
+        Product finalProduct = result.get();
+        assertEquals(finalProduct.getProductId(), product1.getProductId());
+        assertEquals(finalProduct.getProductName(), updatedProduct.getProductName());
+        assertEquals(finalProduct.getProductQuantity(), updatedProduct.getProductQuantity());
+    }
+
+    @Test
+    void testUpdateByIdNotFound() {
+        Product updatedProduct = new Product();
+        updatedProduct.setProductName("Berserk Vol. 1 Deluxe");
+        updatedProduct.setProductQuantity(2);
+
+        Optional<Product> result = productRepository.updateById("non-existent", updatedProduct);
+
+        assertFalse(result.isPresent());
+    }
 }
