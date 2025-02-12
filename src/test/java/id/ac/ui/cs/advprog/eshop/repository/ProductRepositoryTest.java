@@ -133,4 +133,47 @@ public class ProductRepositoryTest {
 
         assertFalse(result.isPresent());
     }
+
+    @Test
+    void testDeleteByIdSuccess() {
+        Product product1 = new Product();
+        product1.setProductId("c245ed51-ad89-4e6f-b50a-35293ab8d7d1");
+        product1.setProductName("Berserk Vol. 1");
+        product1.setProductQuantity(1);
+        productRepository.create(product1);
+
+        boolean result = productRepository.deleteById(product1.getProductId());
+
+        assertTrue(result);
+    }
+
+    @Test
+    void testDeleteByIdNotFound() {
+        boolean result = productRepository.deleteById("non-existent");
+
+        assertFalse(result);
+    }
+
+    @Test
+    void testDeleteByIdWithMultipleProducts() {
+        Product product1 = new Product();
+        product1.setProductId("c245ed51-ad89-4e6f-b50a-35293ab8d7d1");
+        product1.setProductName("Berserk Vol. 1");
+        product1.setProductQuantity(1);
+        productRepository.create(product1);
+
+        Product product2 = new Product();
+        product2.setProductId("8f1de06e-58ee-4b5b-85f5-6a822710f07e");
+        product2.setProductName("Berserk Vol. 2");
+        product2.setProductQuantity(1);
+        productRepository.create(product2);
+
+        boolean result = productRepository.deleteById(product1.getProductId());
+        assertTrue(result);
+
+        Iterator<Product> productIterator = productRepository.findAll();
+        assertTrue(productIterator.hasNext());
+        assertEquals(product2.getProductId(), productIterator.next().getProductId());
+        assertFalse(productIterator.hasNext());
+    }
 }
