@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,6 +24,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.servlet.ModelAndView;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
@@ -57,6 +60,19 @@ public class ProductControllerTest {
             .andExpect(status().isOk())
             .andExpect(model().attribute("products", productList))
             .andExpect(view().name("ListProduct"));
+    }
+
+    @Test
+    void testCreateProductPage() throws Exception {
+        MvcResult result = this.mockMvc
+            .perform(get("/product/create"))
+            .andExpect(status().isOk())
+            .andExpect(model().attributeExists("product"))
+            .andExpect(view().name("CreateProduct"))
+            .andReturn();
+
+        ModelAndView modelAndView = result.getModelAndView();
+        assertTrue(modelAndView.getModel().get("product") instanceof Product);
     }
 
     @Test
