@@ -6,6 +6,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -59,5 +63,27 @@ public class ProductServiceTest {
         Product product = updatedProduct.get();
         assertEquals(product, newProduct);
         verify(productRepository, times(1)).updateById(oldProduct.getProductId(), newProduct);
+    }
+
+    @Test
+    void testFindAll() {
+        Product product1 = new Product();
+        product1.setProductId(UUID.randomUUID().toString());
+        product1.setProductName("Kaoru Hana wa Rin to Saku Vol. 1");
+        product1.setProductQuantity(1);
+
+        Product product2 = new Product();
+        product2.setProductId(UUID.randomUUID().toString());
+        product2.setProductName("Kaoru Hana wa Rin to Saku Vol. 2");
+        product2.setProductQuantity(1);
+
+        Iterator<Product> productIterator = Arrays.asList(product1, product2).iterator();
+
+        when(productRepository.findAll()).thenReturn(productIterator);
+
+        List<Product> productList = productService.findAll();
+
+        assertEquals(productList.get(0), product1);
+        assertEquals(productList.get(1), product2);
     }
 }
