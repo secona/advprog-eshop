@@ -1,0 +1,33 @@
+name: PMD Code Analysis
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pmd:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run PMD
+        uses: pmd/pmd-github-action@v2
+        with:
+          version: 7.0.0-rc4
+          rulesets: rulesets/java/quickstart.xml
+          dir: src
+          format: text
+          output-file: pmd-results.sarif
+
+      - name: Upload PMD results as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pmd-results
+          path: pmd-results.sarif
+
+      - name: Upload SARIF results to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: pmd-results.sarif
