@@ -1,8 +1,13 @@
 package id.ac.ui.cs.advprog.eshop.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -11,9 +16,11 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -50,5 +57,27 @@ public class ProductControllerTest {
             .andExpect(status().isOk())
             .andExpect(model().attribute("products", productList))
             .andExpect(view().name("ListProduct"));
+    }
+
+    @Test
+    void testCreateProductPost() throws Exception {
+        this.mockMvc
+            .perform(
+                post("/product/create")
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .param("productName", "Kaoru Hana wa Rin to Saku Vol. 1")
+                    .param("productQuantity", "1")
+            )
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("list"));
+
+        // Get the product being created
+        ArgumentCaptor<Product> productCaptor = ArgumentCaptor.forClass(Product.class);
+        verify(productService, times(1)).create(productCaptor.capture());
+
+        // Test the created product
+        Product capturedProduct = productCaptor.getValue();
+        assertEquals("Kaoru Hana wa Rin to Saku Vol. 1", capturedProduct.getProductName());
+        assertEquals(1, capturedProduct.getProductQuantity());
     }
 }
