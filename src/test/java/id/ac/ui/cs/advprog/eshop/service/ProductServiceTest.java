@@ -6,7 +6,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -85,5 +84,22 @@ public class ProductServiceTest {
 
         assertEquals(productList.get(0), product1);
         assertEquals(productList.get(1), product2);
+        verify(productRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testFindOneById() {
+        Product product = new Product();
+        product.setProductId(UUID.randomUUID().toString());
+        product.setProductName("Kaoru Hana wa Rin to Saku Vol. 1");
+        product.setProductQuantity(1);
+
+        when(productRepository.findOneById(product.getProductId())).thenReturn(Optional.of(product));
+
+        Optional<Product> savedProduct = productService.findOneById(product.getProductId());
+
+        assertTrue(savedProduct.isPresent());
+        assertEquals(savedProduct.get(), product);
+        verify(productRepository, times(1)).findOneById(product.getProductId());
     }
 }
