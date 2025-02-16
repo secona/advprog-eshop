@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.eshop.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -95,6 +97,32 @@ public class ProductControllerTest {
         Product capturedProduct = productCaptor.getValue();
         assertEquals("Kaoru Hana wa Rin to Saku Vol. 1", capturedProduct.getProductName());
         assertEquals(1, capturedProduct.getProductQuantity());
+    }
+
+    @Test
+    void testUpdateProductPageNotFound() throws Exception {
+        when(productService.findOneById(anyString())).thenReturn(Optional.empty());
+
+        this.mockMvc
+            .perform(get("/product/edit/non-existent"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("ProductNotFound"));
+    }
+
+    @Test
+    void testUpdateProductPageFound() throws Exception {
+        Product product = new Product();
+        product.setProductId(UUID.randomUUID().toString());
+        product.setProductName("Kaoru Hana wa Rin to Saku Vol. 1");
+        product.setProductQuantity(1);
+
+        when(productService.findOneById(product.getProductId())).thenReturn(Optional.of(product));
+
+        this.mockMvc
+            .perform(get("/product/edit/" + product.getProductId()))
+            .andExpect(status().isOk())
+            .andExpect(model().attribute("product", product))
+            .andExpect(view().name("EditProduct"));
     }
 
     @Test
