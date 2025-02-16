@@ -110,4 +110,16 @@ public class ProductControllerTest {
         assertEquals("Kaoru Hana wa Rin to Saku Vol. 2", capturedProduct.getProductName());
         assertEquals(2, capturedProduct.getProductQuantity());
     }
+
+    @Test
+    void testDeleteProductPost() throws Exception {
+        String productId = UUID.randomUUID().toString();
+
+        this.mockMvc
+            .perform(post("/product/delete/" + productId))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("../list"));
+
+        verify(productService, times(1)).deleteById(productId);
+    }
 }
