@@ -102,4 +102,18 @@ public class ProductServiceTest {
         assertEquals(savedProduct.get(), product);
         verify(productRepository, times(1)).findOneById(product.getProductId());
     }
+
+    @Test
+    void testDeleteById() {
+        Product product = new Product();
+        product.setProductId(UUID.randomUUID().toString());
+        product.setProductName("Kaoru Hana wa Rin to Saku Vol. 1");
+        product.setProductQuantity(1);
+
+        when(productRepository.deleteById(product.getProductId())).thenReturn(true);
+
+        productService.deleteById(product.getProductId());
+
+        verify(productRepository, times(1)).deleteById(product.getProductId());
+    }
 }
