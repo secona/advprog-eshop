@@ -80,4 +80,34 @@ public class ProductControllerTest {
         assertEquals("Kaoru Hana wa Rin to Saku Vol. 1", capturedProduct.getProductName());
         assertEquals(1, capturedProduct.getProductQuantity());
     }
+
+    @Test
+    void testUpdateProductPost() throws Exception {
+        Product product = new Product();
+        product.setProductId(UUID.randomUUID().toString());
+        product.setProductName("Kaoru Hana wa Rin to Saku Vol. 1");
+        product.setProductQuantity(1);
+
+        this.mockMvc
+            .perform(
+                post("/product/edit/" + product.getProductId())
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .param("productName", "Kaoru Hana wa Rin to Saku Vol. 2")
+                    .param("productQuantity", "2")
+            )
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("../list"));
+
+        // Get the product being created
+        ArgumentCaptor<String> idCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<Product> productCaptor = ArgumentCaptor.forClass(Product.class);
+        verify(productService, times(1)).updateById(idCaptor.capture(), productCaptor.capture());
+
+        // Test the updated product
+        Product capturedProduct = productCaptor.getValue();
+        String capturedId = idCaptor.getValue();
+        assertEquals(product.getProductId(), capturedId);
+        assertEquals("Kaoru Hana wa Rin to Saku Vol. 2", capturedProduct.getProductName());
+        assertEquals(2, capturedProduct.getProductQuantity());
+    }
 }
