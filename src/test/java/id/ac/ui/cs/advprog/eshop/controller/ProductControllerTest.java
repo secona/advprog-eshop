@@ -156,6 +156,32 @@ public class ProductControllerTest {
     }
 
     @Test
+    void testDeleteProductPageNotFound() throws Exception {
+        when(productService.findOneById(anyString())).thenReturn(Optional.empty());
+
+        this.mockMvc
+            .perform(get("/product/delete/non-existent"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("ProductNotFound"));
+    }
+
+    @Test
+    void testDeleteProductPageFound() throws Exception {
+        Product product = new Product();
+        product.setProductId(UUID.randomUUID().toString());
+        product.setProductName("Kaoru Hana wa Rin to Saku Vol. 1");
+        product.setProductQuantity(1);
+
+        when(productService.findOneById(product.getProductId())).thenReturn(Optional.of(product));
+
+        this.mockMvc
+            .perform(get("/product/delete/" + product.getProductId()))
+            .andExpect(status().isOk())
+            .andExpect(model().attribute("product", product))
+            .andExpect(view().name("DeleteProduct"));
+    }
+
+    @Test
     void testDeleteProductPost() throws Exception {
         String productId = UUID.randomUUID().toString();
 
