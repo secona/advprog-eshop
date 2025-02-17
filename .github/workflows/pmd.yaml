@@ -4,16 +4,19 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   pmd:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Run PMD
-        uses: pmd/pmd-github-action@v2
+        uses: pmd/pmd-github-action@d9c1f3c5940cbf5923f1354e83fa858b4496ebaa
         with:
           version: 7.0.0-rc4
           rulesets: rulesets/java/quickstart.xml
@@ -21,7 +24,7 @@ jobs:
           uploadSarifReport: true
 
       - name: Upload PMD results as artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08
         with:
           name: pmd-results
           path: pmd-results.sarif
