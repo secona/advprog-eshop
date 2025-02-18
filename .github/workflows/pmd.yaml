@@ -6,6 +6,8 @@ on:
 
 permissions:
   contents: read
+  security-events: write
+  actions: read
 
 jobs:
   pmd:
@@ -22,9 +24,9 @@ jobs:
           rulesets: rulesets/java/quickstart.xml
           sourcePath: src
           uploadSarifReport: true
+          analyzeModifiedFilesOnly: false
 
-      - name: Upload PMD results as artifacts
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@9e8d0789d4a0fa9ceb6b1738f7e269594bdd67f0
         with:
-          name: pmd-results
-          path: pmd-results.sarif
+          sarif_file: pmd-report.sarif
