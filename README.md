@@ -43,4 +43,8 @@ The root cause of this issue is CI scripts having more than needed permissions t
 ### Java Source Code Issues
 For these issues, I simply follow the provided instructions. If the issue is an unused import, I remove it. If it’s an unnecessary modifier, I remove the modifier. Similarly, I address other issues by applying the recommended fixes accordingly.
 
+## CI/CD
+
+The current CI/CD workflows have met their respective definitions. The CI workflow includes unit tests, while the CD workflow is managed by Koyeb. To maintain code quality across all branches, the CI workflow runs tests automatically on every push and pull request to the repository. However, Koyeb will only deploy from the master branch, ensuring that only approved changes reach production. If the CI tests fail, Koyeb will block the deployment, preventing unstable code from being released.
+
 </details>
