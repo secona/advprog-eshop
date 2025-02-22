@@ -3,7 +3,6 @@ package id.ac.ui.cs.advprog.eshop.repository;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
@@ -26,32 +25,32 @@ public class CarRepository {
         return car;
     }
 
-    public Optional<Car> findById(String id) {
+    public Car findById(String id) {
         for (Car car : carData) {
             if (car.getCarId().equals(id)) {
-                return Optional.of(car);
+                return car;
             }
         }
 
-        return Optional.empty();
+        return null;
     }
 
     public Iterator<Car> findAll() {
         return carData.iterator();
     }
 
-    public Optional<Car> update(String id, Car updatedCar) {
+    public Car update(String id, Car updatedCar) {
         for (int i = 0; i < carData.size(); i++) {
             Car car = carData.get(i);
             if (car.getCarId().equals(id)) {
                 car.setCarName(updatedCar.getCarName());
                 car.setCarColor(updatedCar.getCarColor());
                 car.setCarQuantity(updatedCar.getCarQuantity());
-                return Optional.of(car);
+                return car;
             }
         }
 
-        return Optional.empty();
+        return null;
     }
 
     public void delete(String id) {
