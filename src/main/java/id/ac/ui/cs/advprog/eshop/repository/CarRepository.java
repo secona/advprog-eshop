@@ -26,6 +26,16 @@ public class CarRepository {
         return car;
     }
 
+    public Optional<Car> findById(String id) {
+        for (Car car : carData) {
+            if (car.getCarId().equals(id)) {
+                return Optional.of(car);
+            }
+        }
+
+        return Optional.empty();
+    }
+
     public Iterator<Car> findAll() {
         return carData.iterator();
     }
