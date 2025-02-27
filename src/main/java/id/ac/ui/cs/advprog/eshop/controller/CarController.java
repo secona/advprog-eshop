@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/car")
@@ -44,9 +45,14 @@ public class CarController {
 
     @GetMapping("/editCar/{carId}")
     public String editCarPage(@PathVariable String carId, Model model) {
-        Car car = carService.findById(carId);
-        model.addAttribute("car", car);
-        return "EditCar";
+        Optional<Car> car = carService.findById(carId);
+
+        if (car.isPresent()) {
+            model.addAttribute("car", car.get());
+            return "EditCar";
+        } else {
+            return "redirect:../listCar";
+        }
     }
 
     @PostMapping("/editCar")

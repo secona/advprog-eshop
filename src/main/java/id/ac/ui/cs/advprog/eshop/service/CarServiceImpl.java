@@ -3,6 +3,7 @@ package id.ac.ui.cs.advprog.eshop.service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -32,14 +33,13 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car findById(String carId) {
-        Car car = carRepository.findById(carId);
-        return car;
+    public Optional<Car> findById(String carId) {
+        return carRepository.findById(carId);
     }
 
     @Override
-    public void updateById(String carId, Car car) {
-        carRepository.update(carId, car);
+    public Optional<Car> updateById(String carId, Car car) {
+        return carRepository.update(carId, car);
     }
 
     @Override
