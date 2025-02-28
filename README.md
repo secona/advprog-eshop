@@ -48,3 +48,44 @@ For these issues, I simply follow the provided instructions. If the issue is an 
 The current CI/CD workflows have met their respective definitions. The CI workflow includes unit tests, while the CD workflow is managed by Koyeb. To maintain code quality across all branches, the CI workflow runs tests automatically on every push and pull request to the repository. However, Koyeb will only deploy from the master branch, ensuring that only approved changes reach production. If the CI tests fail, Koyeb will block the deployment, preventing unstable code from being released.
 
 </details>
+
+<details>
+<summary>
+  :two: Module 3
+</summary>
+
+## Explain what principles you apply to your project!
+
+### Single-responsibility Principle
+1. **Separation of Controllers** &mdash; Before implementing SOLID, the `CarController` class is under `ProductController`. However, this is incorrect, because a class should only be responsible to one thing. To fix this, I separated `CarController` and `ProductController`.
+2. **Move Logging to a Service** &mdash; Initially, the `CarController` class handled logging directly by printing messages to the command line. This was incorrect because logging is not the responsibility of a controller. To address this, I created a separate service, `LogConsoleService`, which handles all logging operations. This keeps the controller focused solely on handling HTTP requests.
+
+### Open-closed Principle
+1. **Logging Service** &mdash; As I said above, I implemented a log service called `LogConsoleService`. However, this is not the only possible logging service. There may be other logging service, such as `LogFileService` to log messages to a specified file on the server, or maybe `LogSlackService` to send logs to a Slack channel. To address this, I created an interface called `LogService`. This interface defines a consistent API for logging operations. Any logging service that needs to be added in the future can implement this interface without modifying the existing code, making the system open for extension but closed for modification.
+
+### Liskov Substitution Principle
+1. **Separate Car Controller and Product Controller** &mdash; Before applying SOLID, the `CarController` class is a subclass of `ProductController`. This meant that replacing `ProductController` with `CarController` would lead to incorrect behavior. To resolve this, I remove the inheritance of `CarController` to `ProductController`, ensuring that each controller functions independently and adheres to its intended purpose.
+
+### Interface Segregation Principle
+1. **Separate Repository** &mdash; To follow the Interface Segregation Principle (ISP), I divided the repository into two separate interfaces: WritableRepository and ReadonlyRepository. This ensures that each interface has a specific purpose, preventing classes from being forced to implement unnecessary methods. By breaking the repository into smaller, more focused interfaces, the code becomes easier to maintain, extend, and modify without affecting unrelated functionality.
+
+### Dependency Inversion Principle
+1. **Decoupling Car Controller** &mdash; Before applying SOLID principles, I noticed that in `CarController`, the car service was declared as type `CarServiceImpl`. This tightly coupled the controller to a specific implementation, making it difficult to test and maintain. To fix this, I simply changed the variable declaration to use the type `CarService`. This allows flexibility, making it easier to swap out different implementations (e.g. `CarServiceMock` for testing).
+
+## Explain the advantages of applying SOLID principles to your project with examples.
+Applying SOLID principles makes the project easier to maintain and modify.
+
+For example, I have a service for logging to console, `LogConsoleService`. Because of the Single-responsibility Principle, modifying how logs are formatted is straightforward. If I need to add more context to the logs—such as timestamps, log levels, or request details—I can do so by updating LogConsoleService without affecting other parts of the application. This prevents code duplication and reduces the risk of inconsistencies.
+
+Further more, because of the Open-Closed Principle, I can introduce additional logging services, such as `LogFileService` for writing logs to a file or `LogSlackService` for sending logs to a Slack channel, without modifying existing code. These new services simply implement the `LogService` interface, making it easy to swap or extend logging functionality.
+
+Additionally, applying the Dependency Inversion Principle (DIP) ensures that CarController and other components depend on the LogService abstraction rather than a specific implementation. This makes testing easier since I can inject a mock logging service instead of relying on actual console output.
+
+## Explain the disadvantages of not applying SOLID principles to your project with examples.
+
+1. **Hard to Test** &mdash; Without dependency inversion, unit testing becomes difficult because dependencies cannot be easily replaced with mocks.
+2. **More Code Duplication** &mdash; Violation to the SRP, multiple parts of the codebase may handle the same functionality (such as logging). This increases maintanence effort and the risk of inconsistencies.
+3. **Difficult to Extend** &mdash; Without OCP, logging service is not as glamorous as it currently is. Adding a new logging service should be as simple as creating a new class that implements LogService. However, without OCP, introducing additional logging services would require modifying existing code, making the system more error-prone and inconsistent.
+4. **Difficult to Modify** &mdash; With SRP, each class has a single, well-defined responsibility, making the codebase more understandable and maintainable. When responsibilities are clearly separated, it's easy to locate where a specific functionality belongs, reducing confusion and making future modifications straightforward. Without SRP, a class might take on multiple responsibilities, leading to unclear boundaries. This makes it harder to determine what a class is supposed to do, making modifications more challenging.
+
+</details>

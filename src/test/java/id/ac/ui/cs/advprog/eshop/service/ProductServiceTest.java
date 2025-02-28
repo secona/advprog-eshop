@@ -54,14 +54,14 @@ public class ProductServiceTest {
         newProduct.setProductName("Kaoru Hana wa Rin to Saku Vol. 2");
         newProduct.setProductQuantity(1);
 
-        when(productRepository.updateById(oldProduct.getProductId(), newProduct)).thenReturn(Optional.of(newProduct));
+        when(productRepository.update(oldProduct.getProductId(), newProduct)).thenReturn(Optional.of(newProduct));
 
         Optional<Product> updatedProduct = productService.updateById(oldProduct.getProductId(), newProduct);
         assertTrue(updatedProduct.isPresent());
 
         Product product = updatedProduct.get();
         assertEquals(product, newProduct);
-        verify(productRepository, times(1)).updateById(oldProduct.getProductId(), newProduct);
+        verify(productRepository, times(1)).update(oldProduct.getProductId(), newProduct);
     }
 
     @Test
@@ -94,13 +94,13 @@ public class ProductServiceTest {
         product.setProductName("Kaoru Hana wa Rin to Saku Vol. 1");
         product.setProductQuantity(1);
 
-        when(productRepository.findOneById(product.getProductId())).thenReturn(Optional.of(product));
+        when(productRepository.findById(product.getProductId())).thenReturn(Optional.of(product));
 
         Optional<Product> savedProduct = productService.findOneById(product.getProductId());
 
         assertTrue(savedProduct.isPresent());
         assertEquals(savedProduct.get(), product);
-        verify(productRepository, times(1)).findOneById(product.getProductId());
+        verify(productRepository, times(1)).findById(product.getProductId());
     }
 
     @Test
@@ -110,10 +110,8 @@ public class ProductServiceTest {
         product.setProductName("Kaoru Hana wa Rin to Saku Vol. 1");
         product.setProductQuantity(1);
 
-        when(productRepository.deleteById(product.getProductId())).thenReturn(true);
-
         productService.deleteById(product.getProductId());
 
-        verify(productRepository, times(1)).deleteById(product.getProductId());
+        verify(productRepository, times(1)).delete(product.getProductId());
     }
 }

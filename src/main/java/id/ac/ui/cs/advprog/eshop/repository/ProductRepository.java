@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class ProductRepository {
+public class ProductRepository implements WritableRepository<Product, String>, ReadonlyRepository<Product, String> {
     private List<Product> productData = new ArrayList<>();
 
     public Product create(Product product) {
@@ -15,7 +15,7 @@ public class ProductRepository {
         return product;
     }
 
-    public Optional<Product> findOneById(String productId) {
+    public Optional<Product> findById(String productId) {
         Optional<Product> productResult = Optional.empty();
 
         for (Product product : productData) {
@@ -28,8 +28,8 @@ public class ProductRepository {
         return productResult;
     }
 
-    public Optional<Product> updateById(String productId, Product productData) {
-        Optional<Product> productOptional = findOneById(productId);
+    public Optional<Product> update(String productId, Product productData) {
+        Optional<Product> productOptional = findById(productId);
 
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
@@ -42,15 +42,13 @@ public class ProductRepository {
         return Optional.empty();
     }
 
-    public boolean deleteById(String productId) {
+    public void delete(String productId) {
         for (Product product : productData) {
             if (product.getProductId().equals(productId)) {
                 productData.remove(product);
-                return true;
+                return;
             }
         }
-
-        return false;
     }
 
     public Iterator<Product> findAll() {
