@@ -79,7 +79,7 @@ public class ProductRepositoryTest {
         product1.setProductQuantity(1);
         productRepository.create(product1);
 
-        Optional<Product> found = productRepository.findOneById(product1.getProductId());
+        Optional<Product> found = productRepository.findById(product1.getProductId());
 
         assertTrue(found.isPresent());
 
@@ -97,7 +97,7 @@ public class ProductRepositoryTest {
         product1.setProductQuantity(1);
         productRepository.create(product1);
 
-        Optional<Product> found = productRepository.findOneById("c245ed51-ad89-4e6f-b50a-35293ab8d7d1");
+        Optional<Product> found = productRepository.findById("c245ed51-ad89-4e6f-b50a-35293ab8d7d1");
 
         assertFalse(found.isPresent());
     }
@@ -114,7 +114,7 @@ public class ProductRepositoryTest {
         updatedProduct.setProductName("Berserk Vol. 1 Deluxe");
         updatedProduct.setProductQuantity(2);
 
-        Optional<Product> result = productRepository.updateById(product1.getProductId(), updatedProduct);
+        Optional<Product> result = productRepository.update(product1.getProductId(), updatedProduct);
 
         assertTrue(result.isPresent());
         Product finalProduct = result.get();
@@ -129,7 +129,7 @@ public class ProductRepositoryTest {
         updatedProduct.setProductName("Berserk Vol. 1 Deluxe");
         updatedProduct.setProductQuantity(2);
 
-        Optional<Product> result = productRepository.updateById("non-existent", updatedProduct);
+        Optional<Product> result = productRepository.update("non-existent", updatedProduct);
 
         assertFalse(result.isPresent());
     }
@@ -142,16 +142,15 @@ public class ProductRepositoryTest {
         product1.setProductQuantity(1);
         productRepository.create(product1);
 
-        boolean result = productRepository.deleteById(product1.getProductId());
+        productRepository.delete(product1.getProductId());
 
-        assertTrue(result);
+        assertTrue(productRepository.findById(product1.getProductId()).isEmpty());
     }
 
     @Test
     void testDeleteByIdNotFound() {
-        boolean result = productRepository.deleteById("non-existent");
-
-        assertFalse(result);
+        productRepository.delete("non-existent");
+        assertFalse(productRepository.findAll().hasNext());
     }
 
     @Test
@@ -168,8 +167,7 @@ public class ProductRepositoryTest {
         product2.setProductQuantity(1);
         productRepository.create(product2);
 
-        boolean result = productRepository.deleteById(product1.getProductId());
-        assertTrue(result);
+        productRepository.delete(product1.getProductId());
 
         Iterator<Product> productIterator = productRepository.findAll();
         assertTrue(productIterator.hasNext());
@@ -184,9 +182,7 @@ public class ProductRepositoryTest {
         product.setProductQuantity(1);
         productRepository.create(product);
 
-        boolean result = productRepository.deleteById(null);
-
-        assertFalse(result);
+        productRepository.delete(null);
 
         Iterator<Product> products = productRepository.findAll();
         assertTrue(products.hasNext());

@@ -33,16 +33,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Optional<Product> findOneById(String productId) {
-        return productRepository.findOneById(productId);
+        return productRepository.findById(productId);
     }
 
     @Override
     public Optional<Product> updateById(String productId, Product productData) {
-        return productRepository.updateById(productId, productData);
+        return productRepository.update(productId, productData);
     }
 
     @Override
     public void deleteById(String productId) {
-        productRepository.deleteById(productId);
+        productRepository.delete(productId);
     }
 }
