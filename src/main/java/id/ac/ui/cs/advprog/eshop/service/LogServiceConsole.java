@@ -1,37 +1,35 @@
 package id.ac.ui.cs.advprog.eshop.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Component
 public class LogServiceConsole implements LogService {
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final Logger logger = LoggerFactory.getLogger(LogServiceConsole.class);
 
     @Override
     public void log(String level, String message) {
-        String timestamp = LocalDateTime.now().format(formatter);
-        System.out.println("[" + timestamp + "] [" + level + "] " + message);
+        logger.info("{}: {}", level, message);
     }
 
     @Override
     public void info(String message) {
-        log("INFO", message);
+        logger.info(message);
     }
 
     @Override
     public void debug(String message) {
-        log("DEBUG", message);
+        logger.debug(message);
     }
 
     @Override
     public void warn(String message) {
-        log("WARN", message);
+        logger.warn(message);
     }
 
     @Override
     public void error(String message) {
-        log("ERROR", message);
+        logger.error(message);
     }
 }
