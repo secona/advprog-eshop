@@ -56,7 +56,7 @@ public class OrderTest {
     @Test
     void testCreateOrderSuccessStatus() {
         Order order = new Order("d4bfe9c1-c0da-4b94-bda4-7921c451ac14", this.products, 1708560000L, "Guts", "SUCCESS");
-        assertEquals("STATUS", order.getStatus());
+        assertEquals("SUCCESS", order.getStatus());
     }
 
     @Test

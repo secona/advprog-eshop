@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Builder
@@ -13,11 +14,40 @@ public class Order {
     List<Product> products;
     Long orderTime;
     String author;
-
-    @Setter
     String status;
 
-    public Order(String id, List<Product> products, Long orderTime, String author) {}
+    public Order(String id, List<Product> products, Long orderTime, String author) {
+        this.id = id;
+        this.orderTime = orderTime;
+        this.author = author;
+        this.status = "WAITING_PAYMENT";
 
-    public Order(String id, List<Product> products, Long orderTime, String author, String status) {}
+        if (products.isEmpty()) {
+            throw new IllegalArgumentException("Product list is empty");
+        } else {
+            this.products = products;
+        }
+    }
+
+    public Order(String id, List<Product> products, Long orderTime, String author, String status) {
+        this(id, products, orderTime, author);
+
+        String[] statusList = {"WAITING_PAYMENT", "FAILED", "SUCCESS", "CANCELLED"};
+
+        if (Arrays.stream(statusList).noneMatch(s -> s.equals(status))) {
+            throw new IllegalArgumentException("Product status is not valid");
+        } else {
+            this.status = status;
+        }
+    }
+
+    public void setStatus(String status) {
+        String[] statusList = {"WAITING_PAYMENT", "FAILED", "SUCCESS", "CANCELLED"};
+
+        if (Arrays.stream(statusList).noneMatch(s -> s.equals(status))) {
+            throw new IllegalArgumentException("Product status is not valid");
+        } else {
+            this.status = status;
+        }
+    }
 }
