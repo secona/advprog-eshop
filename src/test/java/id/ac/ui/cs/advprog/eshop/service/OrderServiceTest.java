@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,13 +39,13 @@ public class OrderServiceTest {
 
         products.add(product1);
 
+        orders = new ArrayList<>();
+
         Order order1 = new Order("d4bfe9c1-c0da-4b94-bda4-7921c451ac14", products, 1708560000L, "Guts");
         Order order2 = new Order("f55e5029-9f30-43e7-87b0-7e979f392c24", products, 1708560000L, "Guts");
-        Order order3 = new Order("a27143e5-ffa9-4e39-a3b1-3761eafeacaf", products, 1708560000L, "Griffith");
 
         orders.add(order1);
         orders.add(order2);
-        orders.add(order3);
     }
 
     @Test
@@ -95,7 +96,7 @@ public class OrderServiceTest {
     void testUpdateStatusInvalidOrderId() {
         doReturn(null).when(orderRepository).findById("asdf");
 
-        assertThrows(IllegalArgumentException.class, () -> orderService.updateStatus("asdf", OrderStatus.SUCCESS.getValue()));
+        assertThrows(NoSuchElementException.class, () -> orderService.updateStatus("asdf", OrderStatus.SUCCESS.getValue()));
         verify(orderRepository, times(0)).save(any(Order.class));
     }
 
@@ -119,7 +120,7 @@ public class OrderServiceTest {
     @Test
     void testFindAllByAuthorIfAuthorCorrect() {
         Order order = orders.get(1);
-        doReturn(order).when(orderRepository).findAllByAuthor(order.getAuthor());
+        doReturn(orders).when(orderRepository).findAllByAuthor(order.getAuthor());
 
         List<Order> results = orderService.findAllByAuthor(order.getAuthor());
         for (Order result : results) {
