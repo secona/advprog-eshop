@@ -82,4 +82,26 @@ public class PaymentTest {
         assertEquals("REJECTED", payment.getStatus());
         assertSame(paymentData, payment.getPaymentData());
     }
+
+    @Test
+    void testUpdatePaymentUsingValidStatus() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("address", "Jakarta");
+        paymentData.put("deliveryFee", "100000");
+
+        Payment payment = new Payment("d0ef59ff-7e69-44b6-961b-bdb3c016cc3b", "CASH_ON_DELIVERY", paymentData);
+        payment.setStatus("REJECTED");
+
+        assertEquals("REJECTED", payment.getStatus());
+    }
+
+    @Test
+    void testUpdatePaymentUsingInvalidStatus() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("deliveryFee", "100000");
+
+        Payment payment = new Payment("d0ef59ff-7e69-44b6-961b-bdb3c016cc3b", "CASH_ON_DELIVERY", paymentData);
+
+        assertThrows(IllegalArgumentException.class, () -> payment.setStatus("ASDF"));
+    }
 }
