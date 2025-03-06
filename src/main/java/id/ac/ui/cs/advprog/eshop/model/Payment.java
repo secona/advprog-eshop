@@ -1,8 +1,9 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
 import lombok.Getter;
-import lombok.Setter;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -14,8 +15,18 @@ public class Payment {
 
     public Payment(String id, String method, Map<String, String> paymentData) {
         this.id = id;
-        this.method = method;
+        this.setMethod(method);
         this.setPaymentData(paymentData);
+    }
+
+    public void setMethod(String method) {
+        List<String> validMethods = Arrays.asList(new String[]{"CASH_ON_DELIVERY", "VOUCHER_CODE"});
+
+        if (!validMethods.contains(method)) {
+            throw new IllegalArgumentException("Invalid method: " + method);
+        }
+
+        this.method = method;
     }
 
     public void setPaymentData(Map<String, String> paymentData) {
