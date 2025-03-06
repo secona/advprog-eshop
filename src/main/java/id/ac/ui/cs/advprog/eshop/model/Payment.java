@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -20,9 +21,7 @@ public class Payment {
     }
 
     public void setMethod(String method) {
-        List<String> validMethods = Arrays.asList(new String[]{"CASH_ON_DELIVERY", "VOUCHER_CODE"});
-
-        if (!validMethods.contains(method)) {
+        if (!PaymentMethod.contains(method)) {
             throw new IllegalArgumentException("Invalid method: " + method);
         }
 
@@ -78,10 +77,6 @@ public class Payment {
             return false;
         }
 
-        if (address.isEmpty() || deliveryFee.isEmpty()) {
-            return false;
-        }
-
-        return true;
+        return !address.isEmpty() && !deliveryFee.isEmpty();
     }
 }
