@@ -9,6 +9,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PaymentTest {
     @Test
+    void testCreatePaymentInvalidMethod() {
+        Map<String, String> paymentData = new HashMap<>();
+
+        assertThrows(IllegalArgumentException.class,
+                () -> new Payment("d0ef59ff-7e69-44b6-961b-bdb3c016cc3b", "INVALID", paymentData));
+    }
+
+    @Test
     void testCreatePaymentByValidVoucherCode() {
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
