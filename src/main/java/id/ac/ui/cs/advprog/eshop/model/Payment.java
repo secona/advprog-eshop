@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
 import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -29,9 +30,7 @@ public class Payment {
     }
 
     public void setStatus(String status) {
-        List<String> statusList = Arrays.asList("SUCCESS", "REJECTED");
-
-        if (!statusList.contains(status)) {
+        if (!PaymentStatus.contains(status)) {
             throw new IllegalArgumentException("Invalid status: " + status);
         }
 
