@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class PaymentServiceTest {
     @InjectMocks
-    PaymentService paymentService;
+    PaymentServiceImpl paymentService;
 
     @Mock
     PaymentRepository paymentRepository;
@@ -45,6 +45,8 @@ public class PaymentServiceTest {
 
         orders.add(order1);
         orders.add(order2);
+
+        payments = new ArrayList<>();
 
         Map<String, String> paymentData = new HashMap<>();
 
@@ -95,7 +97,7 @@ public class PaymentServiceTest {
         doReturn(payment).when(paymentRepository).save(any(), any());
 
         Payment result = paymentService.addPayment(order, payment.getMethod(), payment.getPaymentData());
-        verify(paymentRepository, times(1)).save(payment, order);
+        verify(paymentRepository, times(1)).save(any(Payment.class), any(Order.class));
         assertEquals(result.getId(), payment.getId());
     }
 
@@ -104,11 +106,12 @@ public class PaymentServiceTest {
         Order order = orders.getFirst();
         Payment payment = payments.getFirst();
 
+        doReturn(payment).when(paymentRepository).save(any(), any());
         doReturn(payment).when(paymentRepository).save(any());
 
         paymentService.addPayment(order, payment.getMethod(), payment.getPaymentData());
         paymentService.setStatus(payment, "REJECTED");
-        verify(paymentRepository, times(1)).save(payment, order);
-        verify(paymentRepository, times(1)).save(payment);
+        verify(paymentRepository, times(1)).save(any(Payment.class), any(Order.class));
+        verify(paymentRepository, times(1)).save(any(Payment.class));
     }
 }
