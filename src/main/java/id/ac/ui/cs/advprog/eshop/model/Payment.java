@@ -28,6 +28,16 @@ public class Payment {
         this.method = method;
     }
 
+    public void setStatus(String status) {
+        List<String> statusList = Arrays.asList("SUCCESS", "REJECTED");
+
+        if (!statusList.contains(status)) {
+            throw new IllegalArgumentException("Invalid status: " + status);
+        }
+
+        this.status = status;
+    }
+
     public void setPaymentData(Map<String, String> paymentData) {
         switch (this.method) {
             case "VOUCHER_CODE":
