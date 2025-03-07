@@ -89,3 +89,26 @@ Additionally, applying the Dependency Inversion Principle (DIP) ensures that Car
 4. **Difficult to Modify** &mdash; With SRP, each class has a single, well-defined responsibility, making the codebase more understandable and maintainable. When responsibilities are clearly separated, it's easy to locate where a specific functionality belongs, reducing confusion and making future modifications straightforward. Without SRP, a class might take on multiple responsibilities, leading to unclear boundaries. This makes it harder to determine what a class is supposed to do, making modifications more challenging.
 
 </details>
+
+<details>
+<summary>
+  :four: Module 4
+</summary>
+
+## Reflection on TDD Flow Based on Percival (2017)
+
+The TDD flow has been quite useful in guiding development, ensuring that each feature is well-defined before implementation. Writing tests first helped clarify requirements and prevented unnecessary code. However, there were moments when I wrote part of the implementation before creating tests, which slightly reduced the benefits of strict TDD. In the future, I need to be more disciplined about writing a failing test first before adding any functionality.
+
+One challenge I encountered was occasionally skipping the refactor step after passing a test. While the initial implementation worked, some areas could have been optimized further. Next time, I will make a habit of reviewing the code after each green test to ensure it remains clean and maintainable. Additionally, while the tests provided confidence in correctness, I need to improve coverage for edge cases to handle unexpected inputs better.
+
+## Evaluation of F.I.R.S.T. Principles
+
+1. **First** &mdash; The tests execute quickly, with CI runs averaging under 1 minute and unit tests completing in around 30 seconds. This ensures they do not disrupt the development workflow.
+2. **Isolated/Independent** &mdash; Each test runs independently without relying on others, ensuring that failures are localized and do not cascade.
+3. **Repeatable** &mdash; Tests produce consistent results across different environments. They pass reliably on both my Windows machine and the CI server running Ubuntu.
+4. **Self-Validating** &mdash; Clear and meaningful assertions ensure that test results are immediately actionable, simplifying debugging and reducing ambiguity.
+5. **Thorough/Timely** &mdash; Tests are written before implementation, covering all critical paths, including both happy and edge cases, to ensure comprehensive validation.
+
+Overall, my tests follow the F.I.R.S.T. principles well, making them reliable and efficient. They run quickly, don’t depend on each other, and give clear results, which makes debugging easier. Writing tests before implementation has also helped ensure good coverage. Moving forward, I’ll keep refining my approach to maintain a solid testing foundation.
+
+</details>
